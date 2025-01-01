@@ -32,7 +32,12 @@ const connectors = connectorsForWallets(
     {
       groupName: "Popular",
       wallets: [
-        walletConnectWallet({ chains: [mainnet], projectId: infuraApiKey }),
+        walletConnectWallet({
+          chains: [mainnet],
+          options: {
+            projectId: infuraApiKey,
+          },
+        }),
       ],
     },
     {
