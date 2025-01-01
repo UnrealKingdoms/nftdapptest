@@ -12,9 +12,9 @@ import {
   trustWallet,
   ledgerWallet,
 } from "@rainbow-me/rainbowkit/wallets";
-import { configureChains, createConfig } from "@wagmi/core";
+import { configureChains, createConfig } from "wagmi";
 import { mainnet } from "wagmi/chains";
-import { publicProvider } from "@wagmi/core/providers/public";
+import { publicProvider } from "wagmi/providers/public";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // Hardcoded projectId
@@ -24,30 +24,28 @@ const projectId = "2GQEuel4OBbYmZKDFtjGoOA7ZXv";
 const { chains, publicClient } = configureChains([mainnet], [publicProvider()]);
 
 // Define wallet connectors
-const connectors = connectorsForWallets(
-  [
-    {
-      groupName: "Popular",
-      wallets: [
-        walletConnectWallet({ chains, projectId }),
-      ],
-    },
-    {
-      groupName: "Other",
-      wallets: [
-        argentWallet({ chains }),
-        trustWallet({ chains }),
-        ledgerWallet({ chains }),
-      ],
-    },
-  ],
-  { appName: "YourAppName" }
-);
+const connectors = connectorsForWallets([
+  {
+    groupName: "Popular",
+    wallets: [
+      walletConnectWallet({ chains, projectId }),
+    ],
+  },
+  {
+    groupName: "Other",
+    wallets: [
+      argentWallet({ chains }),
+      trustWallet({ chains }),
+      ledgerWallet({ chains }),
+    ],
+  },
+], { appName: "YourAppName" });
 
 // Create wagmi config
 const wagmiConfig = createConfig({
   connectors,
   chains,
+  publicClient,
 });
 
 // Initialize the Query Client
@@ -60,3 +58,4 @@ export function Providers({ children }: { children: React.ReactNode }) {
     </QueryClientProvider>
   );
 }
+
