@@ -14,8 +14,8 @@ import {
 } from "@rainbow-me/rainbowkit/wallets";
 import { configureChains, createConfig } from "wagmi";
 import { mainnet } from "wagmi/chains";
-import { publicProvider } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { publicProvider } from "wagmi/providers/public";
 
 // Hardcoded projectId
 const projectId = "2GQEuel4OBbYmZKDFtjGoOA7ZXv";
@@ -43,8 +43,8 @@ const connectors = connectorsForWallets([
 
 // Create wagmi config
 const wagmiConfig = createConfig({
+  autoConnect: true, // Enable auto-connect if desired
   connectors,
-  chains,
   publicClient,
 });
 
@@ -54,8 +54,9 @@ const queryClient = new QueryClient();
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <RainbowKitProvider theme={darkTheme()}>{children}</RainbowKitProvider>
+      <RainbowKitProvider theme={darkTheme()} chains={chains}>
+        {children}
+      </RainbowKitProvider>
     </QueryClientProvider>
   );
 }
-
