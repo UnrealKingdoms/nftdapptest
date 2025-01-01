@@ -23,7 +23,7 @@ const infuraApiKey = "2GQEuel4OBbYmZKDFtjGoOA7ZXv";
 // Define Viem HTTP transport for the mainnet
 const mainnetClient = {
   chain: mainnet,
-  transport: http({ url: `https://mainnet.infura.io/v3/${infuraApiKey}` }),
+  transport: http(`https://mainnet.infura.io/v3/${infuraApiKey}`), // Pass URL directly
 };
 
 // Define wallet connectors
