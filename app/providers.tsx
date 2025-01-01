@@ -4,42 +4,59 @@ import * as React from "react";
 import {
   RainbowKitProvider,
   darkTheme,
-  getDefaultWallets,
-  getDefaultConfig,
+  connectorsForWallets,
 } from "@rainbow-me/rainbowkit";
 import {
+  walletConnectWallet,
   argentWallet,
   trustWallet,
   ledgerWallet,
 } from "@rainbow-me/rainbowkit/wallets";
+import { configureChains, createConfig } from "@wagmi/core";
 import { mainnet } from "wagmi/chains";
+import { publicProvider } from "@wagmi/core/providers/public";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { WagmiProvider } from "wagmi";
 
-const { wallets } = getDefaultWallets();
+// Hardcoded projectId
+const projectId = "2GQEuel4OBbYmZKDFtjGoOA7ZXv";
 
-const config = getDefaultConfig({
-  appName: "Cyber Ape Yacht Club",
-  projectId: process.env.NEXT_PUBLIC_WC_ID!,
-  wallets: [
-    ...wallets,
+// Configure chains
+const { chains, publicClient } = configureChains([mainnet], [publicProvider()]);
+
+// Define wallet connectors
+const connectors = connectorsForWallets(
+  [
+    {
+      groupName: "Popular",
+      wallets: [
+        walletConnectWallet({ chains, projectId }),
+      ],
+    },
     {
       groupName: "Other",
-      wallets: [argentWallet, trustWallet, ledgerWallet],
+      wallets: [
+        argentWallet({ chains }),
+        trustWallet({ chains }),
+        ledgerWallet({ chains }),
+      ],
     },
   ],
-  chains: [mainnet],
-  ssr: true,
+  { appName: "YourAppName" }
+);
+
+// Create wagmi config
+const wagmiConfig = createConfig({
+  connectors,
+  chains,
 });
 
+// Initialize the Query Client
 const queryClient = new QueryClient();
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <WagmiProvider config={config}>
-      <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider theme={darkTheme()}>{children}</RainbowKitProvider>
-      </QueryClientProvider>
-    </WagmiProvider>
+    <QueryClientProvider client={queryClient}>
+      <RainbowKitProvider theme={darkTheme()}>{children}</RainbowKitProvider>
+    </QueryClientProvider>
   );
 }
