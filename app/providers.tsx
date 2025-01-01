@@ -12,7 +12,7 @@ import {
   trustWallet,
   ledgerWallet,
 } from "@rainbow-me/rainbowkit/wallets";
-import { configureChains, createConfig } from "@wagmi/core";
+import { configureChains, createConfig } from "wagmi"; // Import from wagmi
 import { mainnet } from "wagmi/chains";
 import { http } from "viem"; // Import Viem transport
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
