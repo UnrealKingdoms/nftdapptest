@@ -14,7 +14,7 @@ import {
 } from "@rainbow-me/rainbowkit/wallets";
 import { configureChains, createConfig } from "wagmi";
 import { mainnet } from "wagmi/chains";
-import { publicProvider } from "wagmi/providers/public";
+import { publicProvider } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // Hardcoded projectId
