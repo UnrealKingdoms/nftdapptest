@@ -12,40 +12,45 @@ import {
   trustWallet,
   ledgerWallet,
 } from "@rainbow-me/rainbowkit/wallets";
-import { configureChains, createConfig, publicProvider } from "wagmi";
+import { configureChains, createConfig } from "@wagmi/core";
 import { mainnet } from "wagmi/chains";
+import { infuraProvider } from "@wagmi/core/providers/infura";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+// Infura project ID
+const infuraApiKey = "2GQEuel4OBbYmZKDFtjGoOA7ZXv";
 
-// Hardcoded projectId
-const projectId = "2GQEuel4OBbYmZKDFtjGoOA7ZXv";
-
-// Configure chains
-const { chains, publicClient } = configureChains([mainnet], [publicProvider()]);
+// Configure chains with Infura provider
+const { chains, publicClient } = configureChains(
+  [mainnet],
+  [infuraProvider({ apiKey: infuraApiKey })]
+);
 
 // Define wallet connectors
-const connectors = connectorsForWallets([
-  {
-    groupName: "Popular",
-    wallets: [
-      walletConnectWallet({ chains, projectId }),
-    ],
-  },
-  {
-    groupName: "Other",
-    wallets: [
-      argentWallet({ chains }),
-      trustWallet({ chains }),
-      ledgerWallet({ chains }),
-    ],
-  },
-], { appName: "YourAppName" });
+const connectors = connectorsForWallets(
+  [
+    {
+      groupName: "Popular",
+      wallets: [
+        walletConnectWallet({ chains, projectId: infuraApiKey }),
+      ],
+    },
+    {
+      groupName: "Other",
+      wallets: [
+        argentWallet({ chains }),
+        trustWallet({ chains }),
+        ledgerWallet({ chains }),
+      ],
+    },
+  ],
+  { appName: "YourAppName" }
+);
 
 // Create wagmi config
 const wagmiConfig = createConfig({
-  autoConnect: true, // Enable auto-connect if desired
   connectors,
-  publicClient,
+  chains,
 });
 
 // Initialize the Query Client
@@ -54,9 +59,7 @@ const queryClient = new QueryClient();
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <RainbowKitProvider theme={darkTheme()} chains={chains}>
-        {children}
-      </RainbowKitProvider>
+      <RainbowKitProvider theme={darkTheme()}>{children}</RainbowKitProvider>
     </QueryClientProvider>
   );
 }
