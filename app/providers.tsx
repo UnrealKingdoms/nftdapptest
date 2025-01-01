@@ -27,25 +27,30 @@ const mainnetClient = {
 };
 
 // Define wallet connectors
-const connectors = connectorsForWallets([
+const connectors = connectorsForWallets(
+  [
+    {
+      groupName: "Popular",
+      wallets: [
+        walletConnectWallet({
+          projectId: infuraApiKey,
+          chains: [mainnet],
+        }),
+      ],
+    },
+    {
+      groupName: "Other",
+      wallets: [
+        argentWallet({ chains: [mainnet] }),
+        trustWallet({ chains: [mainnet] }),
+        ledgerWallet({ chains: [mainnet] }),
+      ],
+    },
+  ],
   {
-    groupName: "Popular",
-    wallets: [
-      walletConnectWallet({
-        projectId: infuraApiKey, // Ensure this is in the correct spot
-        chains: [mainnet],
-      }),
-    ],
-  },
-  {
-    groupName: "Other",
-    wallets: [
-      argentWallet({ chains: [mainnet] }),
-      trustWallet({ chains: [mainnet] }),
-      ledgerWallet({ chains: [mainnet] }),
-    ],
-  },
-]);
+    appName: "YourAppName", // Add your app name here
+  }
+);
 
 // Create wagmi config
 const wagmiConfig = createConfig({
