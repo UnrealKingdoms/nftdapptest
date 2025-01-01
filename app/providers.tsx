@@ -12,10 +12,10 @@ import {
   trustWallet,
   ledgerWallet,
 } from "@rainbow-me/rainbowkit/wallets";
-import { configureChains, createConfig } from "wagmi";
+import { configureChains, createConfig, publicProvider } from "wagmi";
 import { mainnet } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { publicProvider } from "wagmi/providers/public";
+
 
 // Hardcoded projectId
 const projectId = "2GQEuel4OBbYmZKDFtjGoOA7ZXv";
