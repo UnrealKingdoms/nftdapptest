@@ -33,8 +33,10 @@ const connectors = connectorsForWallets(
       groupName: "Popular",
       wallets: [
         walletConnectWallet({
-          projectId: infuraApiKey,
           chains: [mainnet],
+          options: {
+            projectId: infuraApiKey,
+          },
         }),
       ],
     },
@@ -48,7 +50,7 @@ const connectors = connectorsForWallets(
     },
   ],
   {
-    appName: "YourAppName", // Add your app name here
+    appName: "YourAppName",
   }
 );
 
