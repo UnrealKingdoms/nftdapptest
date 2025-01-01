@@ -23,34 +23,29 @@ const infuraApiKey = "2GQEuel4OBbYmZKDFtjGoOA7ZXv";
 // Define Viem HTTP transport for the mainnet
 const mainnetClient = {
   chain: mainnet,
-  transport: http(`https://mainnet.infura.io/v3/${infuraApiKey}`), // Pass URL directly
+  transport: http(`https://mainnet.infura.io/v3/${infuraApiKey}`),
 };
 
 // Define wallet connectors
-const connectors = connectorsForWallets(
-  [
-    {
-      groupName: "Popular",
-      wallets: [
-        walletConnectWallet({
-          chains: [mainnet],
-          options: {
-            projectId: infuraApiKey,
-          },
-        }),
-      ],
-    },
-    {
-      groupName: "Other",
-      wallets: [
-        argentWallet({ chains: [mainnet] }),
-        trustWallet({ chains: [mainnet] }),
-        ledgerWallet({ chains: [mainnet] }),
-      ],
-    },
-  ],
-  { appName: "YourAppName" }
-);
+const connectors = connectorsForWallets([
+  {
+    groupName: "Popular",
+    wallets: [
+      walletConnectWallet({
+        projectId: infuraApiKey, // Ensure this is in the correct spot
+        chains: [mainnet],
+      }),
+    ],
+  },
+  {
+    groupName: "Other",
+    wallets: [
+      argentWallet({ chains: [mainnet] }),
+      trustWallet({ chains: [mainnet] }),
+      ledgerWallet({ chains: [mainnet] }),
+    ],
+  },
+]);
 
 // Create wagmi config
 const wagmiConfig = createConfig({
