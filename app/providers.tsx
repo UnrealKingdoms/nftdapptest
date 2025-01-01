@@ -14,16 +14,16 @@ import {
 } from "@rainbow-me/rainbowkit/wallets";
 import { configureChains, createConfig } from "@wagmi/core";
 import { mainnet } from "wagmi/chains";
-import { infuraProvider } from "@wagmi/core/providers/infura";
+import { http } from "viem"; // Import Viem transport
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // Infura project ID
 const infuraApiKey = "2GQEuel4OBbYmZKDFtjGoOA7ZXv";
 
-// Configure chains with Infura provider
+// Configure chains with Viem transport (HTTP)
 const { chains, publicClient } = configureChains(
   [mainnet],
-  [infuraProvider({ apiKey: infuraApiKey })]
+  [http({ url: `https://mainnet.infura.io/v3/${infuraApiKey}` })]
 );
 
 // Define wallet connectors
@@ -50,7 +50,7 @@ const connectors = connectorsForWallets(
 // Create wagmi config
 const wagmiConfig = createConfig({
   connectors,
-  chains,
+  publicClient, // Viem public client
 });
 
 // Initialize the Query Client
@@ -59,7 +59,9 @@ const queryClient = new QueryClient();
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <RainbowKitProvider theme={darkTheme()}>{children}</RainbowKitProvider>
+      <RainbowKitProvider theme={darkTheme()} chains={chains}>
+        {children}
+      </RainbowKitProvider>
     </QueryClientProvider>
   );
 }
